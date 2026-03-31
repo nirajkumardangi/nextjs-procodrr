@@ -6,13 +6,16 @@ export default function Home() {
       <h1>Welcome My First Next App</h1>
       <ul>
         <li>
-          <Link href="home">Home</Link>
+          <Link href="">Home</Link>
         </li>
         <li>
           <Link href="about">About</Link>
         </li>
         <li>
           <Link href="contacts">Contacts</Link>
+        </li>
+        <li>
+          <Link href="courses">Courses</Link>
         </li>
       </ul>
     </>
