@@ -1,4 +1,4 @@
 export default async function blog({ params, searchParams }) {
   const { blog } = await params;
-  return <h3>Blog Name: {blog}</h3>;
+  return <h2>Blog Name: {blog}</h2>;
 }
