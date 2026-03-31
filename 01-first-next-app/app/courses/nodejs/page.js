@@ -1,4 +1,6 @@
-import React from 'react'
+export const metadata = {
+  title: "Node.js",
+};
 
 export default function NodeJS() {
   return (

@@ -1,4 +1,7 @@
-import React from 'react'
+export const metadata = {
+  title: "MERN",
+};
+
 
 export default function MERN() {
   return (
