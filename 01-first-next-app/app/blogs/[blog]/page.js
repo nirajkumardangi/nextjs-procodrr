@@ -9,6 +9,9 @@ export async function generateMetadata({ params }) {
 // Only allow the blog IDs defined in generateStaticParams, deny all other dynamic routes
 export const dynamicParams = false;
 
+// Enable ISR (incremetal site regeneration): refresh this page at most once every 5 seconds
+export const revalidate = 5;
+
 // Pre-generate static pages for these blog IDs at build time
 export function generateStaticParams() {
   return [
