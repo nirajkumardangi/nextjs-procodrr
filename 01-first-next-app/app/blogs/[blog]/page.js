@@ -6,6 +6,9 @@ export async function generateMetadata({ params }) {
   };
 }
 
+// Only allow the blog IDs defined in generateStaticParams, deny all other dynamic routes
+export const dynamicParams = false;
+
 // Pre-generate static pages for these blog IDs at build time
 export function generateStaticParams() {
   return [
