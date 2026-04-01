@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+// Force dynamic rendering for this page on every request
+export const dynamic = "force-dynamic";
+
 export default function Courses() {
   return (
     <>
