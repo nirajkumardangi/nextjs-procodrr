@@ -5,19 +5,22 @@ export default function Home() {
     <>
       <h1>Welcome My First Next App</h1>
       <ul>
-        <li>
+        <li className="text-blue-700">
           <Link href="">Home</Link>
         </li>
-        <li>
+        <li className="text-blue-700">
           <Link href="blogs">Blogs</Link>
         </li>
-        <li>
+        <li className="text-blue-700">
+          <Link href="todo">Todos</Link>
+        </li>
+        <li className="text-blue-700">
           <Link href="about">About</Link>
         </li>
-        <li>
+        <li className="text-blue-700">
           <Link href="contacts">Contacts</Link>
         </li>
-        <li>
+        <li className="text-blue-700">
           <Link href="courses">Courses</Link>
         </li>
       </ul>
