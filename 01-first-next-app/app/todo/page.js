@@ -1,6 +1,10 @@
 import TodoCard from "@/components/TodoCard";
 
 export default async function Todo() {
+  // call this slow api to test shimmer loadind effect
+  const slowResponse = await fetch("https://procodrr.vercel.app/?sleep=2000");
+
+  // call todos api on server
   const response = await fetch(
     "https://jsonplaceholder.typicode.com/todos?_limit=10",
     {
@@ -9,8 +13,9 @@ export default async function Todo() {
       },
     },
   );
+
   const todos = await response.json();
-  console.log("Server side log");
+
   return (
     <div className="p-8">
       <h2 className="text-3xl font-bold text-gray-900 mb-8">All Todo</h2>
