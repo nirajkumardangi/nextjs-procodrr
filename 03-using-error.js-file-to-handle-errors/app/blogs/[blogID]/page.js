@@ -1,7 +1,14 @@
 const Blog = async ({ params }) => {
   const { blogID } = await params;
 
-  if (blogID % 2 === 0) {
+  // if (blogID % 2 === 0) {
+  //   throw new Error("An error occured!");
+  // }
+
+  const randomNumber = Math.random();
+  console.log(randomNumber);
+  
+  if (randomNumber > 0.5) {
     throw new Error("An error occured!");
   }
 
