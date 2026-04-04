@@ -1,12 +1,12 @@
 [
   {
     "id": "84d08841-9ab8-4fbd-97e8-774470f68304",
-    "title": "Learn XML",
+    "text": "Learn XML",
     "completed": true
   },
   {
     "id": "dfd38e57-f004-45dc-9f4a-e6d90bb491a0",
-    "title": "Complete HTML",
+    "text": "Complete HTML",
     "completed": false
   }
 ]

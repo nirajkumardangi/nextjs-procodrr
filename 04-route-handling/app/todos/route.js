@@ -1,16 +1,18 @@
 import { writeFile } from "fs/promises";
 import todosData from "../../todos.json";
 
+// GET: Fetch all todos
 export function GET() {
   return Response.json(todosData);
 }
 
+// POST: Create a new todo
 export async function POST(request) {
   const todo = await request.json();
 
   const newTodo = {
     id: crypto.randomUUID(),
-    title: todo.title,
+    text: todo.text,
     completed: false,
   };
 
