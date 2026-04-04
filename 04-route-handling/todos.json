@@ -1,8 +1,8 @@
 [
   {
     "id": "84d08841-9ab8-4fbd-97e8-774470f68304",
-    "title": "Complete NODE.JS",
-    "completed": false
+    "title": "Learn XML",
+    "completed": true
   },
   {
     "id": "474f9973-4447-449c-a975-e48434c2930c",
@@ -11,8 +11,8 @@
   },
   {
     "id": "cccafc7a-bbb6-48fd-973b-5b65457bdacb",
-    "title": "Complete JAVA",
-    "completed": false
+    "title": "Learn JSON",
+    "completed": true
   },
   {
     "id": "dfd38e57-f004-45dc-9f4a-e6d90bb491a0",
