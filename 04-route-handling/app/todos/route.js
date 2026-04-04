@@ -20,5 +20,5 @@ export async function POST(request) {
 
   await writeFile("todos.json", JSON.stringify(todosData, null, 2));
 
-  return Response.json(todosData);
+  return Response.json(newTodo);
 }
