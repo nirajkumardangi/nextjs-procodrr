@@ -22,6 +22,7 @@ export default function Home() {
 
   // Add new todo
   const addTodo = async (text) => {
+    setTodos(todos);
     const response = await fetch("/todos", {
       method: "POST",
       body: JSON.stringify({ text }),
@@ -31,8 +32,16 @@ export default function Home() {
   };
 
   // Delete todo
-  const deleteTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+  const deleteTodo = async (id) => {
+    setTodos(todos.filter((todo) => id !== todo.id));
+
+    const response = await fetch(`/todos/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.status === 204) {
+      fetchTodos();
+    }
   };
 
   // Toggle todo completion
