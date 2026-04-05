@@ -1,10 +1,18 @@
 import { writeFile } from "fs/promises";
 import todos from "../../../todos.json";
+import connectDB from "@/lib/connectDB";
+import mongoose from "mongoose";
 
 // GET: Fetch a single todo by ID
 export async function GET(_, { params }) {
-  const { id } = await params;
+  await connectDB();
 
+  const result = await mongoose.connection.db
+    .collection("todos")
+    .insertOne({ title: "Leran HTML" });
+  console.log(result);
+
+  const { id } = await params;
   const todo = todos.find((todo) => id === todo.id);
 
   if (!todo) {
