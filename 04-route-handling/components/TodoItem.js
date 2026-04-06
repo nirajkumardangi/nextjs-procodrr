@@ -1,22 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TrashIcon, PencilIcon, Check, X } from "lucide-react";
 
 const TodoItem = ({ todo, deleteTodo, toggleTodo, updateTodo }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
 
+  useEffect(() => {
+    setEditText(todo.text);
+  }, [todo.text]);
+
   const handleEdit = () => {
     setIsEditing(true);
-    setEditText(todo.text);
   };
 
   const handleSave = () => {
-    if (editText.trim()) {
-      updateTodo(todo.id, editText.trim());
+    const trimmed = editText.trim();
+
+    if (!trimmed || trimmed === todo.text) {
       setIsEditing(false);
+      return;
     }
+
+    updateTodo(todo._id, trimmed);
+    setIsEditing(false);
   };
 
   const handleCancel = () => {
@@ -25,20 +33,19 @@ const TodoItem = ({ todo, deleteTodo, toggleTodo, updateTodo }) => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSave();
-    } else if (e.key === "Escape") {
-      handleCancel();
-    }
+    if (e.key === "Enter") handleSave();
+    if (e.key === "Escape") handleCancel();
   };
 
   return (
     <div
-      className={`p-4 rounded-lg border border-border group bg-card hover:border-primary/50 transition-all ${todo.completed ? "bg-opacity-70" : ""}`}
+      className={`p-4 rounded-lg border border-border group bg-card hover:border-primary/50 transition-all ${
+        todo.completed ? "bg-opacity-70" : ""
+      }`}
     >
       <div className="flex items-center gap-3">
         <button
-          onClick={() => toggleTodo(todo.id)}
+          onClick={() => toggleTodo(todo._id)}
           className={`flex justify-center items-center flex-shrink-0 w-5 h-5 rounded-md border transition-colors ${
             todo.completed
               ? "bg-primary border-primary"
@@ -66,7 +73,9 @@ const TodoItem = ({ todo, deleteTodo, toggleTodo, updateTodo }) => {
           </div>
         ) : (
           <p
-            className={`flex-1 transition-opacity ${todo.completed ? "line-through text-muted-foreground" : ""}`}
+            className={`flex-1 transition-opacity ${
+              todo.completed ? "line-through text-muted-foreground" : ""
+            }`}
           >
             {todo.text}
           </p>
@@ -100,7 +109,7 @@ const TodoItem = ({ todo, deleteTodo, toggleTodo, updateTodo }) => {
                 <PencilIcon className="w-4 h-4" />
               </button>
               <button
-                onClick={() => deleteTodo(todo.id)}
+                onClick={() => deleteTodo(todo._id)}
                 className="p-1.5 rounded-md text-red-500 hover:bg-red-500/10 transition-colors"
                 aria-label="Delete todo"
               >

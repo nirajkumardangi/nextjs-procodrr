@@ -1,17 +1,19 @@
 "use client";
 
-import { useState } from 'react';
-import { PlusIcon } from 'lucide-react';
+import { PlusIcon } from "lucide-react";
+import { useState } from "react";
 
 const TodoForm = ({ addTodo }) => {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (input.trim()) {
-      addTodo(input.trim());
-      setInput('');
-    }
+
+    const trimmedText = input.trim();
+    if (!trimmedText) return;
+
+    addTodo(trimmedText);
+    setInput("");
   };
 
   return (

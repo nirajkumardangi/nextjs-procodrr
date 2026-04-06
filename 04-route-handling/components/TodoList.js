@@ -26,51 +26,37 @@ const TodoList = ({ todos, deleteTodo, toggleTodo, updateTodo }) => {
 
   return (
     <div>
+      {/* Header */}
       <div className="mb-4 flex justify-between items-center">
         <div className="text-sm text-muted-foreground">
           <span>{pendingCount} pending</span>
           {completedCount > 0 && <span>, {completedCount} completed</span>}
         </div>
 
+        {/* Filters */}
         <div className="flex space-x-2 text-sm">
-          <button
-            onClick={() => setFilter("all")}
-            className={`px-2 py-1 rounded-md transition-colors ${
-              filter === "all"
-                ? "bg-primary text-primary-foreground"
-                : "hover:bg-muted"
-            }`}
-          >
-            All
-          </button>
-          <button
-            onClick={() => setFilter("active")}
-            className={`px-2 py-1 rounded-md transition-colors ${
-              filter === "active"
-                ? "bg-primary text-primary-foreground"
-                : "hover:bg-muted"
-            }`}
-          >
-            Active
-          </button>
-          <button
-            onClick={() => setFilter("completed")}
-            className={`px-2 py-1 rounded-md transition-colors ${
-              filter === "completed"
-                ? "bg-primary text-primary-foreground"
-                : "hover:bg-muted"
-            }`}
-          >
-            Completed
-          </button>
+          {["all", "active", "completed"].map((type) => (
+            <button
+              key={type}
+              onClick={() => setFilter(type)}
+              className={`px-2 py-1 rounded-md transition-colors ${
+                filter === type
+                  ? "bg-primary text-primary-foreground"
+                  : "hover:bg-muted"
+              }`}
+            >
+              {type.charAt(0).toUpperCase() + type.slice(1)}
+            </button>
+          ))}
         </div>
       </div>
 
+      {/* List */}
       <ul className="space-y-3">
         <AnimatePresence>
           {filteredTodos.map((todo) => (
             <motion.li
-              key={todo.id}
+              key={todo._id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, height: 0, marginBottom: 0 }}

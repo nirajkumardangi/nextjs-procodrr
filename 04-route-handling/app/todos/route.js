@@ -1,24 +1,36 @@
-import { writeFile } from "fs/promises";
-import todosData from "../../todos.json";
+import connectDB from "@/lib/connectDB";
+import Todo from "@/models/todoModel";
 
 // GET: Fetch all todos
-export function GET() {
-  return Response.json(todosData);
+export async function GET() {
+  await connectDB();
+
+  try {
+    const todos = await Todo.find();
+    return Response.json(todos);
+  } catch (error) {
+    return Response.json({ error: "Failed to fetch todos" }, { status: 500 });
+  }
 }
 
 // POST: Create a new todo
 export async function POST(request) {
-  const todo = await request.json();
+  await connectDB();
 
-  const newTodo = {
-    id: crypto.randomUUID(),
-    text: todo.text,
-    completed: false,
-  };
+  try {
+    const { text } = await request.json();
 
-  todosData.push(newTodo);
+    if (!text) {
+      return Response.json({ error: "Text is required" }, { status: 400 });
+    }
 
-  await writeFile("todos.json", JSON.stringify(todosData, null, 2));
+    const newTodo = await Todo.create({
+      text: text,
+      completed: false,
+    });
 
-  return Response.json(newTodo);
+    return Response.json(newTodo, { status: 201 });
+  } catch (error) {
+    return Response.json({ error: "Failed to create todo" }, { status: 500 });
+  }
 }

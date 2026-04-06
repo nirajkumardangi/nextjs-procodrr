@@ -1,72 +1,62 @@
-import { writeFile } from "fs/promises";
-import todos from "../../../todos.json";
 import connectDB from "@/lib/connectDB";
-import mongoose from "mongoose";
+import Todo from "@/models/todoModel";
 
 // GET: Fetch a single todo by ID
 export async function GET(_, { params }) {
   await connectDB();
 
-  const result = await mongoose.connection.db
-    .collection("todos")
-    .insertOne({ title: "Leran HTML" });
-  console.log(result);
+  const { id } = params;
 
-  const { id } = await params;
-  const todo = todos.find((todo) => id === todo.id);
+  try {
+    const todo = await Todo.findById(id);
 
-  if (!todo) {
-    return Response.json(
-      { error: "Todo not found!" },
-      {
-        status: 404,
-      },
-    );
+    if (!todo) {
+      return Response.json({ error: "Todo not found!" }, { status: 404 });
+    }
+
+    return Response.json(todo);
+  } catch (error) {
+    return Response.json({ error: "Invalid ID format" }, { status: 400 });
   }
-
-  return Response.json(todo);
 }
 
 // PUT: Update a todo by ID
 export async function PUT(request, { params }) {
+  await connectDB();
+
+  const { id } = params;
   const editTodoData = await request.json();
-  const { id } = await params;
-  const todoIndex = todos.findIndex((todo) => id === todo.id);
-  const todo = todos[todoIndex];
 
-  if (!todo) {
-    return Response.json(
-      { error: "Todo not found!" },
-      {
-        status: 404,
-      },
-    );
+  try {
+    const updatedTodo = await Todo.findByIdAndUpdate(id, editTodoData, {
+      new: true,
+    });
+
+    if (!updatedTodo) {
+      return Response.json({ error: "Todo not found!" }, { status: 404 });
+    }
+
+    return Response.json(updatedTodo);
+  } catch (error) {
+    return Response.json({ error: "Invalid ID format" }, { status: 400 });
   }
-
-  const editedTodo = { ...todo, ...editTodoData };
-  todos[todoIndex] = editedTodo;
-
-  await writeFile("todos.json", JSON.stringify(todos, null, 2));
-  return Response.json(editedTodo);
 }
 
 // DELETE: Remove a todo by ID
 export async function DELETE(_, { params }) {
-  const { id } = await params;
-  const todoIndex = todos.findIndex((todo) => id === todo.id);
+  await connectDB();
 
-  if (todoIndex === -1) {
-    return Response.json(
-      { error: "Todo not found!" },
-      {
-        status: 404,
-      },
-    );
+  const { id } = params;
+
+  try {
+    const deletedTodo = await Todo.findByIdAndDelete(id);
+
+    if (!deletedTodo) {
+      return Response.json({ error: "Todo not found!" }, { status: 404 });
+    }
+
+    return new Response(null, { status: 204 });
+  } catch (error) {
+    return Response.json({ error: "Invalid ID format" }, { status: 400 });
   }
-
-  todos.splice(todoIndex, 1);
-  await writeFile("todos.json", JSON.stringify(todos, null, 2));
-  return new Response(null, {
-    status: 204,
-  });
 }

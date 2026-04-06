@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import TodoList from "@/components/TodoList";
 import TodoForm from "@/components/TodoForm";
-import { useTheme } from "next-themes";
+import TodoList from "@/components/TodoList";
 import { MoonIcon, SunIcon } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [todos, setTodos] = useState([]);
@@ -22,18 +22,23 @@ export default function Home() {
 
   // Add new todo
   const addTodo = async (text) => {
-    setTodos(todos);
+    if (!text.trim()) return;
+
     const response = await fetch("/todos", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ text }),
     });
+
     const newTodo = await response.json();
-    setTodos([newTodo, ...todos]);
+    setTodos((prevTodos) => [newTodo, ...prevTodos]);
   };
 
   // Delete todo
   const deleteTodo = async (id) => {
-    setTodos(todos.filter((todo) => id !== todo.id));
+    setTodos((prevTodos) => prevTodos.filter((todo) => id !== todo._id));
 
     const response = await fetch(`/todos/${id}`, {
       method: "DELETE",
@@ -45,18 +50,49 @@ export default function Home() {
   };
 
   // Toggle todo completion
-  const toggleTodo = (id) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-      ),
+  const toggleTodo = async (id) => {
+    const todoToToggle = todos.find((todo) => todo._id === id);
+    if (!todoToToggle) return;
+
+    const response = await fetch(`/todos/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ completed: !todoToToggle.completed }),
+    });
+
+    if (!response.ok) {
+      console.error("Failed to toggle todo", await response.text());
+      return;
+    }
+
+    const updatedTodo = await response.json();
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) => (todo._id === id ? updatedTodo : todo)),
     );
   };
 
   // Update todo text
-  const updateTodo = (id, newText) => {
-    setTodos(
-      todos.map((todo) => (todo.id === id ? { ...todo, text: newText } : todo)),
+  const updateTodo = async (id, newText) => {
+    if (!newText.trim()) return;
+
+    const response = await fetch(`/todos/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: newText }),
+    });
+
+    if (!response.ok) {
+      console.error("Failed to update todo", await response.text());
+      return;
+    }
+
+    const updatedTodo = await response.json();
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) => (todo._id === id ? updatedTodo : todo)),
     );
   };
 
